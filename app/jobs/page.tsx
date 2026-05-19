@@ -89,6 +89,21 @@ export default async function JobsPage({
                 Domain Cluster
               </label>
               <div className="space-y-2.5">
+                <label className="group flex cursor-pointer items-center gap-3">
+                  <input
+                    type="radio"
+                    name="skill_set"
+                    value=""
+                    defaultChecked={!skillSet}
+                    className="peer sr-only"
+                  />
+                  <span className="flex size-4 items-center justify-center rounded border border-outline-variant bg-surface-container-low transition duration-300 group-hover:border-primary peer-checked:border-primary peer-checked:bg-primary/10">
+                    <span className="size-2 rounded-sm bg-primary opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
+                  </span>
+                  <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary peer-checked:font-medium peer-checked:text-on-background">
+                    Any Domain
+                  </span>
+                </label>
                 {domainFilters.map((domain) => (
                   <label key={domain} className="group flex cursor-pointer items-center gap-3">
                     <input
