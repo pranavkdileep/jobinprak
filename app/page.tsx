@@ -1,7 +1,8 @@
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import type { ReactNode } from "react";
 
 export default function Home() {
-  const navItems = ["Explore", "Careers", "Jobs", "Network"];
   const categories = [
     {
       title: "Frontend Eng",
@@ -27,50 +28,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden">
-      <header className="fixed left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-[72rem] -translate-x-1/2 rounded-full border border-white/60 bg-white/55 px-4 py-3 shadow-ambient backdrop-blur-2xl md:px-8">
-        <div className="flex items-center justify-between gap-4">
-          <a
-            href="#"
-            className="font-headline text-xl font-bold tracking-[-0.08em] text-on-background transition-transform duration-300 hover:scale-105 md:text-2xl"
-            aria-label="Jobgrid home"
-          >
-            JOBGRID
-          </a>
-
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
-            {navItems.map((item, index) => (
-              <a
-                key={item}
-                href="#"
-                className={`relative text-label-md transition duration-300 after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:text-primary hover:after:w-full ${
-                  index === 0
-                    ? "text-primary after:w-full"
-                    : "text-on-surface-variant after:w-0"
-                }`}
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2 md:gap-4">
-            <a
-              href="#"
-              className="hidden text-label-md text-on-background transition-colors duration-300 hover:text-primary md:block"
-            >
-              Auth
-            </a>
-            <a
-              href="#"
-              className="group rounded-full bg-black px-4 py-2.5 text-sm font-medium text-white transition duration-300 hover:-translate-y-0.5 hover:bg-on-surface hover:shadow-electric md:px-6"
-            >
-              <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">
-                Initialize Account
-              </span>
-            </a>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="container-portal relative flex min-h-[42rem] items-center justify-center pb-24 pt-32 md:min-h-[48rem] md:pb-32 md:pt-44">
         <StatusChip className="left-0 top-24 hidden lg:flex" tone="muted">
@@ -153,26 +111,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="glass-panel-dark relative mt-20 overflow-hidden rounded-t-[2rem] px-5 py-14 md:px-16 md:py-16">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-primary/20 blur-[6rem]" />
-        <div className="relative mx-auto flex max-w-[90rem] flex-col items-center justify-between gap-8 md:flex-row">
-          <div className="font-headline text-2xl font-bold tracking-[-0.08em] text-white">JOBGRID</div>
-          <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4" aria-label="Footer navigation">
-            {['Terms of Service', 'Privacy Layer', 'Documentation', 'System Status'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/45 transition duration-300 hover:text-primary-fixed-dim"
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-          <p className="text-center font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/45 md:text-right">
-            © 2026 Jobgrid Protocol. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
