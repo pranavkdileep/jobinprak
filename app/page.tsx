@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { LocationSelect } from "@/components/location-select";
 import type { ReactNode } from "react";
 
 export default function Home() {
@@ -60,12 +61,7 @@ export default function Home() {
               />
             </label>
             <label className="flex items-center gap-3 rounded-xl border border-transparent bg-surface-container-low px-4 py-3.5 transition duration-300 focus-within:border-primary focus-within:bg-white">
-              <PinIcon className="size-5 shrink-0 text-on-surface-variant transition-colors duration-300 group-focus-within:text-primary" />
-              <input
-                className="w-full border-0 bg-transparent p-0 font-mono text-xs uppercase tracking-[0.18em] outline-none placeholder:text-on-surface-variant focus:outline-none"
-                placeholder="Location Coordinates"
-                type="search"
-              />
+              <LocationSelect />
             </label>
             <button
               type="submit"
@@ -176,15 +172,6 @@ function SearchIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="m21 21-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PinIcon({ className }: { className: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 21s7-5.1 7-12A7 7 0 1 0 5 9c0 6.9 7 12 7 12Z" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
