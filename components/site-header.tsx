@@ -1,8 +1,13 @@
 import Link from "next/link";
 
-const navItems = ["Explore", "Careers", "Jobs", "Network"];
+const navItems = [
+  { key: "explore", label: "Explore", href: "/" },
+  { key: "careers", label: "Careers", href: "#" },
+  { key: "jobs", label: "Jobs", href: "/jobs" },
+  { key: "network", label: "Network", href: "#" },
+];
 
-export function SiteHeader() {
+export function SiteHeader({ active = "explore" }: { active?: string }) {
   return (
     <header className="fixed left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-[72rem] -translate-x-1/2 rounded-full border border-white/60 bg-white/55 px-4 py-3 shadow-ambient backdrop-blur-2xl md:px-8">
       <div className="flex items-center justify-between gap-4">
@@ -15,18 +20,18 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
-          {navItems.map((item, index) => (
-            <a
-              key={item}
-              href="#"
+          {navItems.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
               className={`relative text-label-md transition duration-300 after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:text-primary hover:after:w-full ${
-                index === 0
+                item.key === active
                   ? "text-primary after:w-full"
                   : "text-on-surface-variant after:w-0"
               }`}
             >
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </nav>
 

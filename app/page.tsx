@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden">
-      <SiteHeader />
+      <SiteHeader active="explore" />
 
       <section className="container-portal relative flex min-h-[42rem] items-center justify-center pb-24 pt-32 md:min-h-[48rem] md:pb-32 md:pt-44">
         <StatusChip className="left-0 top-24 hidden lg:flex" tone="muted">
