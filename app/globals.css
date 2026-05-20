@@ -376,6 +376,106 @@
   .initialize-button:active {
     transform: translateY(0);
   }
+
+  .generate-email-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 13.75rem;
+    border: 1px solid var(--color-electric-blue);
+    border-radius: var(--radius-DEFAULT);
+    background: transparent;
+    padding: 0.75rem 1.5rem;
+    color: var(--color-electric-blue);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+
+  .generate-email-button:hover {
+    background: rgb(30 115 255 / 0.06);
+    box-shadow: var(--shadow-electric);
+    transform: translateY(-2px);
+  }
+
+  .dash-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-right: 2px solid transparent;
+    border-radius: var(--radius-DEFAULT);
+    padding: 0.75rem 1rem;
+    color: var(--color-on-surface-variant);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    transition: transform 160ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .dash-nav-item:hover {
+    background: var(--color-surface-container-high);
+    color: var(--color-primary);
+    transform: translateX(2px);
+  }
+
+  .dash-nav-item-active {
+    border-right-color: var(--color-primary);
+    background: var(--color-surface-container-low);
+    color: var(--color-primary);
+    font-weight: 700;
+    transform: scale(0.98);
+  }
+
+  .dash-control {
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-DEFAULT);
+    background: var(--color-surface-container-low);
+    padding-block: 0.5rem;
+    padding-right: 0.75rem;
+    color: var(--color-on-surface);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  }
+
+  .dash-control:focus {
+    border-color: var(--color-primary);
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(0 85 200 / 0.12);
+  }
+
+  .dash-crosshair {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .dash-crosshair::before,
+  .dash-crosshair::after {
+    position: absolute;
+    background: var(--color-blueprint);
+    content: "";
+  }
+
+  .dash-crosshair::before {
+    top: 50%;
+    left: -0.25rem;
+    width: 0.75rem;
+    height: 1px;
+  }
+
+  .dash-crosshair::after {
+    top: -0.25rem;
+    left: 50%;
+    width: 1px;
+    height: 0.75rem;
+  }
 }
 
 @layer utilities {
