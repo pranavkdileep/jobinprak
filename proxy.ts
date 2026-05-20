@@ -7,6 +7,25 @@ const secret = new TextEncoder().encode(
 );
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  const sessionToken = request.cookies.get("session")?.value;
+  const adminToken = request.cookies.get("adminJwt")?.value;
+
+  const isAuthenticated = !!(sessionToken || adminToken);
+
+  if (isAuthenticated && (pathname === "/login" || pathname === "/signup")) {
+    return NextResponse.redirect(new URL("/dash", request.url));
+  }
+
+  if (pathname.startsWith("/admin")) {
+    return handleAdminAuth(request);
+  }
+
+  return NextResponse.next();
+}
+
+async function handleAdminAuth(request: NextRequest) {
   const adminJwt = request.cookies.get("adminJwt")?.value;
 
   if (!adminJwt) {
@@ -32,5 +51,9 @@ function redirectToLogin(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/admin/((?!login).*)",
+  matcher: [
+    "/login",
+    "/signup",
+    "/admin/((?!login).*)",
+  ],
 };

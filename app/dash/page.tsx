@@ -1,3 +1,4 @@
+import { logout } from "@/actions/user/logout";
 import { listUserJobs, type UserJobsParams } from "@/actions/user/jobs";
 import { JobCard } from "@/components/job-card";
 import type { Job } from "@/types/jobs";
@@ -78,9 +79,11 @@ export default async function DashPage({
                 <TerminalIcon className="size-5" />
               </IconButton>
               <div className="hidden h-6 w-px bg-outline-variant sm:block" />
-              <IconButton label="Logout">
-                <PowerIcon className="size-5" />
-              </IconButton>
+              <form action={logout}>
+                <IconButton label="Logout">
+                  <PowerIcon className="size-5" />
+                </IconButton>
+              </form>
             </div>
           </div>
           <nav className="flex gap-2 overflow-x-auto border-t border-outline-variant/60 px-5 py-2 md:hidden" aria-label="Dashboard mobile navigation">
