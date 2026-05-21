@@ -18,8 +18,27 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dash", request.url));
   }
 
+  if (pathname.startsWith("/dash")) {
+    return handleDashAuth(request);
+  }
+
   if (pathname.startsWith("/admin")) {
     return handleAdminAuth(request);
+  }
+
+  return NextResponse.next();
+}
+
+async function handleDashAuth(request: NextRequest) {
+  const sessionToken = request.cookies.get("session")?.value;
+  if (!sessionToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  try {
+    await jwtVerify(sessionToken, secret);
+  } catch {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
@@ -54,6 +73,7 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
+    "/dash/:path*",
     "/admin/((?!login).*)",
   ],
 };
