@@ -45,6 +45,12 @@ export interface SocialLinks {
   twitter?: string;
 }
 
+export interface NotificationSettings {
+  newJob: boolean;
+  newsletter: boolean;
+  promotions: boolean;
+}
+
 export interface User {
   _id?: string;
   firstName: string;
@@ -62,6 +68,15 @@ export interface User {
   certifications: Certification[];
   languages?: string[];
   socialLinks?: SocialLinks;
+  isVerified: boolean;
+  emailVerificationToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+  notificationSettings: NotificationSettings;
+  whatsappNumber?: string;
+  telegramNumber?: string;
+  whatsappNotification: boolean;
+  telegramNotification: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
