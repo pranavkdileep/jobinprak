@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 const dashboardNavItems = [
   { key: "jobs", label: "Jobs", href: "/dash", icon: <TerminalIcon className="size-5" /> },
   { key: "profile", label: "Profile", href: "/dash/profile", icon: <UserIcon className="size-5" /> },
-  { key: "resume", label: "Resume Editor", href: "/dash/resume", icon: <DocumentIcon className="size-5" /> },
+  { key: "resume", label: "Resume", href: "/dash/resume", icon: <DocumentIcon className="size-5" /> },
   { key: "settings", label: "Settings", href: "/dash/settings", icon: <GearIcon className="size-5" /> },
 ];
 

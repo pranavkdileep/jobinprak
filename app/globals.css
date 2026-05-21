@@ -658,6 +658,87 @@
   .toggle-checkbox:checked + .settings-toggle-track .settings-toggle-thumb {
     transform: translateX(1.25rem);
   }
+
+  .resume-preview-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--color-outline-variant);
+    background: white;
+    box-shadow: var(--shadow-ambient);
+    transition: box-shadow 300ms ease, transform 300ms ease;
+  }
+
+  .resume-preview-wrapper:hover {
+    box-shadow: var(--shadow-electric);
+    transform: translateY(-2px);
+  }
+
+  .resume-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-outline-variant);
+    background: var(--color-surface-container-low);
+    padding: 0.6rem 1rem;
+  }
+
+  .resume-iframe-container {
+    position: relative;
+    width: 100%;
+    min-height: 700px;
+    background: #555;
+  }
+
+  .resume-iframe {
+    width: 100%;
+    min-height: 700px;
+    border: none;
+    background: white;
+  }
+
+  .resume-theme-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resume-theme-card::before {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(110deg, transparent 20%, rgb(30 115 255 / 0.08), transparent 80%);
+    opacity: 0;
+    transform: translateX(-120%);
+    transition: opacity 200ms ease;
+  }
+
+  .resume-theme-card:hover::before {
+    animation: scan-line 1100ms ease;
+    opacity: 1;
+  }
+
+  .resume-download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-DEFAULT);
+    background: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+
+  .resume-download-button:hover {
+    box-shadow: var(--shadow-electric);
+    transform: translateY(-2px);
+    background: var(--color-primary-container);
+  }
 }
 
 @layer utilities {
