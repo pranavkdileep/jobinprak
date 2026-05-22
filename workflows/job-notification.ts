@@ -4,7 +4,7 @@ import { sendTelegramMessage } from "@/actions/telegram/send";
 import { sendWhatsAppMessage } from "@/actions/whatsapp/send";
 import type { NotificationChannel, NotificationStatus } from "@/types/notifications";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://jobinpark.eu.cc";
 
 interface UserRecord {
   _id: string;
