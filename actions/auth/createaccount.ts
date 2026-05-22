@@ -45,6 +45,13 @@ export async function createAccount(formData: FormData) {
       password: hashedPassword,
       jobDomain: jobDomain.trim(),
       isVerified: false,
+      notificationSettings: {
+        newJob: true,
+        newsletter: true,
+        promotions: false,
+      },
+      whatsappNotification: false,
+      telegramNotification: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     });

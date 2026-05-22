@@ -4,6 +4,8 @@ import { connectToDatabase } from "@/lib/db";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
+import { start } from "workflow/api";
+import { sendJobNotificationsWorkflow } from "@/workflows/job-notification";
 import type { Job } from "@/types/jobs";
 
 const secret = new TextEncoder().encode(
@@ -222,5 +224,24 @@ export async function deleteJob(jobId: string) {
     return { success: true };
   } catch {
     return { error: "Failed to delete job" };
+  }
+}
+
+export async function startJobNotifications() {
+  try {
+    await verifyAdmin();
+  } catch {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    const run = await start(sendJobNotificationsWorkflow, []);
+    return {
+      success: true,
+      runId: run.runId,
+      message: "Job notification workflow started",
+    };
+  } catch {
+    return { error: "Failed to start job notification workflow" };
   }
 }

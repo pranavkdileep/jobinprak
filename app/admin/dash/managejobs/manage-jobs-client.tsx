@@ -7,6 +7,7 @@ import {
   deleteJob,
   getJob,
   listJobs,
+  startJobNotifications,
   updateJob,
 } from "@/actions/admin/jobs";
 import { useCallback, useEffect, useState } from "react";
@@ -41,6 +42,8 @@ export default function ManageJobsClient() {
   const [bulkResult, setBulkResult] = useState<string | null>(null);
   const [cleanResult, setCleanResult] = useState<string | null>(null);
   const [cleaning, setCleaning] = useState(false);
+  const [notifyResult, setNotifyResult] = useState<string | null>(null);
+  const [notifying, setNotifying] = useState(false);
   const limit = 10;
 
   const fetchJobs = useCallback(async () => {
@@ -183,6 +186,19 @@ export default function ManageJobsClient() {
     setCleaning(false);
   }
 
+  async function handleNotify() {
+    if (!confirm("Send job match notifications to all eligible users?")) return;
+    setNotifying(true);
+    setNotifyResult(null);
+    const res = await startJobNotifications();
+    if ("error" in res) {
+      setNotifyResult(`Error: ${res.error}`);
+    } else {
+      setNotifyResult(`Workflow started (run: ${res.runId})`);
+    }
+    setNotifying(false);
+  }
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center justify-between gap-4">
@@ -236,12 +252,24 @@ export default function ManageJobsClient() {
           >
             {cleaning ? "Cleaning..." : "Clean Expired"}
           </button>
+          <button
+            onClick={handleNotify}
+            disabled={notifying}
+            className="rounded-lg bg-primary px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-primary-container disabled:cursor-wait disabled:opacity-50"
+          >
+            {notifying ? "Notifying..." : "Notify Users"}
+          </button>
         </div>
       </div>
 
       {cleanResult && (
         <div className="rounded-xl border border-error/25 bg-error-container/50 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-on-error-container">
           {cleanResult}
+        </div>
+      )}
+      {notifyResult && (
+        <div className="rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-primary">
+          {notifyResult}
         </div>
       )}
 
