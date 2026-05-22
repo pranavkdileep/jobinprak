@@ -252,26 +252,37 @@ export default async function SettingsPage({
                 <div className="md:col-span-2">
                   <label className="group block">
                     <span className="mb-2 block font-mono text-xs uppercase tracking-[0.16em] text-on-surface-variant transition-colors group-focus-within:text-primary">
-                      Telegram Username
+                      Telegram Chat ID
                     </span>
                     <input
                       className="settings-input"
                       name="telegramNumber"
                       type="text"
                       defaultValue={user?.telegramNumber ?? ""}
-                      placeholder="@username"
+                      placeholder="123456789"
                     />
                   </label>
                 </div>
               </div>
-              <div className="mt-6 flex items-center justify-between">
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
                 <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-on-surface-variant">
                   Link your Telegram handle for encrypted notifications
                 </p>
-                <button type="submit" className="settings-primary-button">
-                  <SyncIcon className="size-4 transition-transform group-hover:rotate-180" />
-                  Register Handle
-                </button>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://t.me/jobinparkbot?start=settings"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 rounded-lg border border-outline-variant px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-on-surface-variant transition hover:border-primary hover:text-primary"
+                  >
+                    <TelegramIcon className="size-4 transition-transform group-hover:scale-110" />
+                    Get Chat ID
+                  </a>
+                  <button type="submit" className="settings-primary-button">
+                    <SyncIcon className="size-4 transition-transform group-hover:rotate-180" />
+                    Register Handle
+                  </button>
+                </div>
               </div>
             </SettingsModule>
           </form>
@@ -404,6 +415,14 @@ function BellIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function TelegramIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M21 3L2 10l7 3 9-6-6 8 3 3 6-15z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

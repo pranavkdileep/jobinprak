@@ -4,6 +4,8 @@ import { sendTelegramMessage } from "@/actions/telegram/send";
 import { sendWhatsAppMessage } from "@/actions/whatsapp/send";
 import type { NotificationChannel, NotificationStatus } from "@/types/notifications";
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
 interface UserRecord {
   _id: string;
   email: string;
@@ -147,6 +149,35 @@ async function checkDuplicateNotification(
   return existing !== null;
 }
 
+function buildMessage(
+  jobs: JobRecord[],
+  suffix: string,
+  limit: number,
+  html: boolean
+): string {
+  const prefix = html ? "🔹 <b>" : "🔹 ";
+  const sep = html ? "</b>\n🏢 " : "\n🏢 ";
+  const desc = html ? "\n📝 " : "\n📝 ";
+
+  const parts: string[] = [];
+  let remaining = limit - suffix.length;
+
+  for (const job of jobs) {
+    const titleLine = `${prefix}${job.job_title}${sep}${job.company_name}`;
+    const descMax = Math.max(30, remaining - titleLine.length - desc.length - 10);
+
+    const entry = `${titleLine}${desc}${job.details.small_description.slice(0, descMax)}`;
+
+    const entryLen = entry.length + (parts.length > 0 ? 2 : 0);
+    if (entryLen > remaining) break;
+
+    parts.push(entry);
+    remaining -= entryLen;
+  }
+
+  return parts.join("\n\n") + suffix;
+}
+
 async function sendAndRecordNotifications(
   user: UserRecord,
   jobs: JobRecord[]
@@ -176,12 +207,8 @@ async function sendAndRecordNotifications(
 
   if (user.telegramNotification && user.telegramNumber) {
     const chatId = user.telegramNumber;
-    const message = jobs
-      .map(
-        (job) =>
-          `🔹 <b>${job.job_title}</b>\n🏢 ${job.company_name}\n📝 ${job.details.small_description.slice(0, 200)}`
-      )
-      .join("\n\n") + `\n\n<a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dash">View all jobs</a>`;
+    const baseLink = `\n\n<a href="${APP_URL}/dash">View all jobs</a>`;
+    const message = buildMessage(jobs, baseLink, 4096, true);
 
     channels.push({
       channel: "telegram",
@@ -191,12 +218,8 @@ async function sendAndRecordNotifications(
 
   if (user.whatsappNotification && user.whatsappNumber) {
     const phone = user.whatsappNumber;
-    const message = jobs
-      .map(
-        (job) =>
-          `🔹 ${job.job_title}\n🏢 ${job.company_name}\n📝 ${job.details.small_description.slice(0, 200)}`
-      )
-      .join("\n\n") + `\n\nView all jobs: ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dash`;
+    const baseLink = `\n\nView all jobs: ${APP_URL}/dash`;
+    const message = buildMessage(jobs, baseLink, 4096, false);
 
     channels.push({
       channel: "whatsapp",

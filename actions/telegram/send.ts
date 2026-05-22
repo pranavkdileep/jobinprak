@@ -13,11 +13,11 @@ export async function sendTelegramMessage(
 
   if (!botToken) {
     console.warn("TELEGRAM_BOT_TOKEN not set — falling back to mock mode.");
-    console.log(`[Mock Telegram] To: @${username}, Message: ${message}`);
-    return { success: true, message: `Mock message sent to @${username}` };
+    console.log(`[Mock Telegram] To: ${username}, Message: ${message}`);
+    return { success: true, message: `Mock message sent to ${username}` };
   }
 
-  const chatId = username.startsWith("@") ? username : `@${username}`;
+  const chatId = username;
 
   try {
     const res = await fetch(
@@ -36,17 +36,21 @@ export async function sendTelegramMessage(
     const data = await res.json();
 
     if (!data.ok) {
+      const desc = data.description || "Unknown error";
+      console.error(`[Telegram] API error for ${username}: ${desc}`);
       return {
         success: false,
-        message: `Telegram API error: ${data.description || "Unknown error"}`,
+        message: `Telegram API error: ${desc}`,
       };
     }
 
     return { success: true, message: `Message sent to @${username}` };
   } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error(`[Telegram] Failed to send to ${username}: ${errorMessage}`);
     return {
       success: false,
-      message: `Failed to send message: ${err instanceof Error ? err.message : "Unknown error"}`,
+      message: `Failed to send message: ${errorMessage}`,
     };
   }
 }

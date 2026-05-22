@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const text = message.text;
 
     if (text === "/start") {
-      const reply = `Your chat ID: <code>${chatId}</code>\n\nShare this with the admin to receive job notifications.`;
+      const reply = `Your chat ID: <code>${chatId}</code>\n\nShare this with settings to receive job notifications.`;
 
       await fetch(
         `https://api.telegram.org/bot${botToken}/sendMessage`,
