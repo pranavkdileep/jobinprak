@@ -14,24 +14,31 @@ export default async function Home() {
       title: "Frontend Eng",
       count: "4,203 Jobs",
       icon: "code",
+      keyword: "frontend",
+      skill_set: "react",
     },
     {
       title: "AI / ML",
       count: "2,150 Jobs",
       icon: "chip",
+      keyword: "AI",
+      skill_set: "machine learning",
     },
     {
       title: "Backend Eng",
       count: "5,892 Jobs",
       icon: "server",
+      keyword: "backend",
+      skill_set: "node",
     },
     {
       title: "Product Design",
       count: "1,840 Jobs",
       icon: "wand",
+      keyword: "design",
+      skill_set: "ui/ux",
     },
   ];
-
   return (
     <main className="min-h-screen overflow-hidden">
       <SiteHeader active="explore" />
@@ -166,7 +173,7 @@ export default async function Home() {
             {categories.map((category) => (
               <a
                 key={category.title}
-                href="#"
+                href={`/jobs?keyword=${encodeURIComponent(category.keyword)}&skill_set=${encodeURIComponent(category.skill_set)}`}
                 className="group/card reveal-line relative overflow-hidden rounded-2xl border border-outline-variant bg-white p-6 shadow-ambient transition duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-electric focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               >
                 <div className="mb-7 flex size-12 items-center justify-center rounded-lg bg-surface-container-low text-on-surface transition duration-300 group-hover/card:rotate-3 group-hover/card:scale-110 group-hover/card:bg-primary/10 group-hover/card:text-primary">
