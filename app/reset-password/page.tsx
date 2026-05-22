@@ -31,7 +31,7 @@ export default async function ResetPasswordPage(props: {
           <div className="mb-10 space-y-4">
             <div className="flex items-center gap-2">
               <span className="font-headline text-sm font-bold uppercase tracking-[-0.08em] text-primary">
-                JOBGRID
+                JobInPark
               </span>
               <span className="rounded bg-surface-container-high px-2 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.08em] text-on-surface-variant">
                 SYSTEM_SECURE

@@ -11,7 +11,7 @@ export function SiteFooter() {
       <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[50rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-primary/20 blur-[6rem]" />
       <div className="relative mx-auto flex max-w-[90rem] flex-col items-center justify-between gap-8 md:flex-row">
         <div className="font-headline text-2xl font-bold tracking-[-0.08em] text-white">
-          JOBGRID
+          JobInPark
         </div>
         <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4" aria-label="Footer navigation">
           {footerItems.map((item) => (
@@ -25,7 +25,7 @@ export function SiteFooter() {
           ))}
         </nav>
         <p className="text-center font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/45 md:text-right">
-          © 2026 Jobgrid Protocol. All rights reserved.
+          © 2026 JobInPark Protocol. All rights reserved.
         </p>
       </div>
     </footer>

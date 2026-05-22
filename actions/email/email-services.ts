@@ -15,7 +15,7 @@ function baseTemplate(body: string) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JOBGRID</title>
+  <title>JobInPark</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f3f4f6;font-family:Geist,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;">
@@ -27,7 +27,7 @@ function baseTemplate(body: string) {
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:-0.08em;text-transform:uppercase;color:#0055c8;">
-                    JOBGRID
+                    JobInPark
                   </td>
                   <td align="right">
                     <table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-block;border-radius:4px;background-color:#e7e8ea;padding:3px 8px;">
@@ -92,7 +92,7 @@ function buildVerificationEmailHtml(token: string): string {
     <tr>
       <td style="padding-bottom:16px;">
         <p style="margin:0;font-family:Geist,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;line-height:1.6;color:#424655;">
-          Thank you for registering with JOBGRID. To activate your account, please verify your email address by clicking the button below.
+          Thank you for registering with JobInPark. To activate your account, please verify your email address by clicking the button below.
         </p>
       </td>
     </tr>
@@ -150,7 +150,7 @@ function buildPasswordResetEmailHtml(token: string): string {
     <tr>
       <td style="padding-bottom:16px;">
         <p style="margin:0;font-family:Geist,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;line-height:1.6;color:#424655;">
-          You requested a password reset for your JOBGRID account. Click the button below to create a new access key.
+          You requested a password reset for your JobInPark account. Click the button below to create a new access key.
         </p>
       </td>
     </tr>

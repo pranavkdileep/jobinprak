@@ -1,5 +1,5 @@
 ---
-name: JobGrid Portal
+name: JobInPark Portal
 colors:
   surface: '#f8f9fb'
   surface-dim: '#d9dadc'

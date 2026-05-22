@@ -44,7 +44,7 @@ export default function SignupForm() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
-          <Field label="Node ID (Email)" name="email" placeholder="operator@jobgrid.net" type="email" error={errors.email} />
+          <Field label="Node ID (Email)" name="email" placeholder="operator@JobInPark.net" type="email" error={errors.email} />
           <Field label="Master Access Key" name="password" placeholder="••••••••••••" type="password" error={errors.password} />
         </div>
 

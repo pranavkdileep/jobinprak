@@ -14,9 +14,9 @@ export function SiteHeader({ active = "explore" }: { active?: string }) {
         <Link
           href="/"
           className="font-headline text-xl font-bold tracking-[-0.08em] text-on-background transition-transform duration-300 hover:scale-105 md:text-2xl"
-          aria-label="Jobgrid home"
+          aria-label="JobInPark home"
         >
-          JOBGRID
+          JobInPark
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">

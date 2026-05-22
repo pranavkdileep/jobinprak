@@ -39,7 +39,7 @@ function DashboardSidebar({ active }: { active: string }) {
         <div className="mb-2 flex items-center gap-3">
           <TerminalIcon className="size-7 text-primary" />
           <Link href="/" className="font-headline text-2xl font-bold uppercase tracking-[-0.08em] text-on-surface">
-            JOBGRID
+            JobInPark
           </Link>
         </div>
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-on-surface-variant">Terminal v2.4.1</p>
@@ -81,7 +81,7 @@ function DashboardTopbar({ active, keyword }: { active: string; keyword: string 
         </form>
         <div className="flex items-center gap-2 md:hidden">
           <TerminalIcon className="size-5 text-primary" />
-          <span className="font-headline text-xl font-bold tracking-[-0.08em]">JOBGRID</span>
+          <span className="font-headline text-xl font-bold tracking-[-0.08em]">JobInPark</span>
         </div>
         <div className="flex items-center gap-3">
           <IconButton label="Notifications">
