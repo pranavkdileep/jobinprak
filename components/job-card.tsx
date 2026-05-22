@@ -5,16 +5,23 @@ export function JobCard({
   job,
   showGenerateEmail = false,
   compact = false,
+  isUserDashboard = false,
 }: {
   job: Job;
   showGenerateEmail?: boolean;
   compact?: boolean;
+  isUserDashboard?: boolean;
 }) {
   const details = job.details;
   const applyValue = details?.apply_email ?? "";
+  const normalEmail = isEmail(applyValue) ? applyValue.trim() : "";
   const externalApply = toExternalUrl(applyValue);
-  const internalApplyHref = `/dash/apply?jobid=${encodeURIComponent(String(job.job_id))}`;
+  const internalApplyHref = `/dash?jobid=${encodeURIComponent(String(job.job_id))}`;
   const emailHref = buildApplyEmailHref(job);
+
+  if(!isEmail(applyValue)){
+    showGenerateEmail = false;
+  }
 
   return (
     <article className="job-card scan-card group relative overflow-hidden rounded-2xl border border-outline-variant/50 bg-white p-5 shadow-ambient transition duration-300 hover:-translate-y-1 hover:border-primary/70 hover:shadow-electric md:p-6">
@@ -83,7 +90,7 @@ export function JobCard({
                 <ExternalIcon className="size-4" />
               </a>
             ) : (
-              <Link href={internalApplyHref} className="initialize-button">
+              <Link href={isUserDashboard ? `mailto:${normalEmail}` : internalApplyHref} className="initialize-button">
                 Initialize
                 <LoginIcon className="size-4" />
               </Link>

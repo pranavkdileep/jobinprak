@@ -116,7 +116,7 @@ export default async function DashPage({
           ) : (
             <div className="grid gap-6">
               {jobs.map((job) => (
-                <JobCard key={job.job_id} job={job} showGenerateEmail compact />
+                <JobCard key={job.job_id} job={job} showGenerateEmail compact isUserDashboard={true} />
               ))}
             </div>
           )}
