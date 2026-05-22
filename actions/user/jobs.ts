@@ -106,7 +106,6 @@ export async function listUserJobs(params: UserJobsParams) {
       db
         .collection("jobs")
         .find(query)
-        .project({ _id: 0 })
         .sort(sortQuery)
         .skip(skip)
         .limit(limit)
@@ -115,7 +114,7 @@ export async function listUserJobs(params: UserJobsParams) {
     ]);
 
     return {
-      jobs,
+      jobs: jobs.map((job) => ({ ...job, _id: job._id.toString() })),
       total,
       page,
       totalPages: Math.ceil(total / limit),
