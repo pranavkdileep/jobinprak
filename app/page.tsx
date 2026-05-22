@@ -1,9 +1,14 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { LocationSelect } from "@/components/location-select";
+import { listPublicJobs } from "@/actions/public/jobs";
+import Link from "next/link";
 import type { ReactNode } from "react";
+import type { Job } from "@/types/jobs";
 
-export default function Home() {
+export default async function Home() {
+  const jobsResult = await listPublicJobs({ page: 1, limit: 6 });
+  const featuredJobs = "jobs" in jobsResult ? (jobsResult.jobs as Job[]) : [];
   const categories = [
     {
       title: "Frontend Eng",
@@ -73,6 +78,79 @@ export default function Home() {
           </form>
         </div>
       </section>
+
+      {featuredJobs.length > 0 && (
+        <section className="border-t border-outline-variant py-16 md:py-20">
+          <div className="container-portal">
+            <div className="mb-10 flex items-center gap-4 md:mb-12">
+              <ListIcon className="size-6 shrink-0 text-primary" />
+              <h2 className="font-headline text-2xl font-semibold uppercase tracking-[-0.05em] text-on-background md:text-[2rem]">
+                Latest Protocols
+              </h2>
+              <div className="h-px flex-1 bg-outline-variant" />
+              <Link
+                href="/jobs"
+                className="shrink-0 rounded-lg border border-outline-variant px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] transition hover:border-primary hover:text-primary"
+              >
+                View All
+              </Link>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredJobs.map((job) => (
+                <Link
+                  key={job.job_id}
+                  href={`/jobs?jobid=${job.job_id}`}
+                  className="group/card relative overflow-hidden rounded-2xl border border-outline-variant bg-white p-5 shadow-ambient transition duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-electric"
+                >
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <h3 className="font-headline text-lg font-bold uppercase leading-tight tracking-[-0.06em] text-on-background line-clamp-2">
+                      {job.job_title}
+                    </h3>
+                    <span className="shrink-0 rounded border border-primary/20 bg-primary/10 px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-primary">
+                      ID:{job.job_id}
+                    </span>
+                  </div>
+
+                  <p className="mb-3 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-on-surface-variant">
+                    ▦ {job.company_name}
+                  </p>
+
+                  {job.details?.small_description && (
+                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-on-surface-variant">
+                      {job.details.small_description}
+                    </p>
+                  )}
+
+                  {job.details?.skill_set?.length > 0 && (
+                    <div className="mb-4 flex flex-wrap gap-1.5">
+                      {job.details.skill_set.slice(0, 3).map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full border border-outline-variant/60 bg-surface-container-low px-2.5 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.12em] text-on-surface-variant"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between border-t border-outline-variant/50 pt-3">
+                    <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-outline">
+                      Closes {formatDate(job.closing_date)}
+                    </span>
+                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-primary opacity-0 transition-opacity group-hover/card:opacity-100">
+                      View Protocol →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        </section>
+      )}
 
       <section className="border-t border-outline-variant py-16 md:py-20">
         <div className="container-portal">
@@ -189,6 +267,24 @@ function GridIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function formatDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value || "TBD";
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
+function ListIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
