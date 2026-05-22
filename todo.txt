@@ -1,0 +1,9 @@
+
+create pages for bottom links
+create a dashbord connector. with analytics
+typo annimation in home page
+
+{
+    password: 'Y1Berg+EgfRTwieyEt0v5T58P/ZyUOpCdxSD4WjgKvU=',
+    username: '+a/NmqDp2Aywo71aiF6ycEjiimh6znzmxeakfEOzYZQ='
+}

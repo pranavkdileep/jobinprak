@@ -2,9 +2,9 @@ import Link from "next/link";
 
 const navItems = [
   { key: "explore", label: "Explore", href: "/" },
-  { key: "careers", label: "Careers", href: "#" },
+  { key: "careers", label: "Careers", href: "/careers" },
   { key: "jobs", label: "Jobs", href: "/jobs" },
-  { key: "network", label: "Network", href: "#" },
+  { key: "network", label: "Network", href: "/network" },
 ];
 
 export function SiteHeader({ active = "explore" }: { active?: string }) {
