@@ -252,14 +252,14 @@ export default async function SettingsPage({
                 <div className="md:col-span-2">
                   <label className="group block">
                     <span className="mb-2 block font-mono text-xs uppercase tracking-[0.16em] text-on-surface-variant transition-colors group-focus-within:text-primary">
-                      Telegram Username / Number
+                      Telegram Username
                     </span>
                     <input
                       className="settings-input"
                       name="telegramNumber"
                       type="text"
                       defaultValue={user?.telegramNumber ?? ""}
-                      placeholder="@username or +91 98765 43210"
+                      placeholder="@username"
                     />
                   </label>
                 </div>

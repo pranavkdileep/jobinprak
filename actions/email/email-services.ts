@@ -212,3 +212,120 @@ export async function sendPasswordResetEmail(
   const html = await getPasswordResetEmailHtml(token);
   return sendEmail(email, "Reset your password", html);
 }
+
+export interface JobNotification {
+  job_title: string;
+  company_name: string;
+  details: {
+    small_description: string;
+    skill_set: string[];
+    min_experience: number;
+    max_experience: number;
+  };
+}
+
+export async function sendJobNotificationEmail(
+  email: string,
+  jobs: JobNotification[]
+): Promise<EmailResult> {
+  const topJobs = jobs.slice(0, 3);
+  const count = topJobs.length;
+
+  const jobCards = topJobs
+    .map(
+      (job, i) => `
+    <tr>
+      <td style="padding-bottom:${i < count - 1 ? "16" : "8"}px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #c2c6d8;border-radius:12px;">
+          <tr>
+            <td style="padding:20px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding-bottom:4px;">
+                    <h2 style="margin:0;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;letter-spacing:-0.02em;color:#191c1e;">
+                      ${job.job_title}
+                    </h2>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:8px;">
+                    <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#0055c8;">
+                      ${job.company_name}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:10px;">
+                    <p style="margin:0;font-family:Geist,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;line-height:1.5;color:#424655;">
+                      ${job.details.small_description}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:3px 8px;border:1px solid #c2c6d8;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#727786;white-space:nowrap;">
+                          ${job.details.min_experience}-${job.details.max_experience} yr
+                        </td>
+                        <td style="width:6px;">&nbsp;</td>
+                        ${job.details.skill_set.slice(0, 3).map(skill => `
+                        <td style="padding:3px 8px;border:1px solid #c2c6d8;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#727786;white-space:nowrap;">
+                          ${skill}
+                        </td>
+                        <td style="width:6px;">&nbsp;</td>
+                        `).join("")}
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>`
+    )
+    .join("");
+
+  const html = baseTemplate(`
+    <tr>
+      <td style="padding-bottom:8px;">
+        <h1 style="margin:0;font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;line-height:1.2;letter-spacing:-0.04em;text-transform:uppercase;color:#191c1e;">
+          New Job Matches
+        </h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding-bottom:24px;">
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.24em;color:#0055c8;">
+          <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background-color:#0055c8;vertical-align:middle;margin-right:6px;"></span>
+          ${count} NEW POSITION${count > 1 ? "S" : ""} FOUND
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding-bottom:16px;">
+        <p style="margin:0;font-family:Geist,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;line-height:1.6;color:#424655;">
+          We found jobs matching your profile. Review the details below and apply before the closing date.
+        </p>
+      </td>
+    </tr>
+    ${jobCards}
+    <tr>
+      <td style="padding:16px 0 0;">
+        <table role="presentation" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="border-radius:8px;background-color:#0055c8;box-shadow:0 0 24px rgba(30,115,255,0.28);">
+              <a href="${APP_URL}/dash" target="_blank" style="display:inline-block;padding:14px 32px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:#ffffff;text-decoration:none;border-radius:8px;">
+                VIEW ALL JOBS
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  `);
+
+  return sendEmail(email, `${count} New Job Match${count > 1 ? "es" : ""} Found`, html);
+}
