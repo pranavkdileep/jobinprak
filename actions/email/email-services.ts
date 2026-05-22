@@ -17,7 +17,7 @@ export async function sendVerificationEmail(
   console.log(`Body:`);
   console.log(`  Thank you for registering!`);
   console.log(`  Please verify your email by clicking the link below:`);
-  console.log(`  ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/verify-email?token=${token}`);
+  console.log(`  ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/verify-email?token=${token}`);
   console.log("=".repeat(60));
 
   return {

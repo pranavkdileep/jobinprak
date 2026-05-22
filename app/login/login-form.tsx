@@ -54,9 +54,9 @@ export default function LoginForm() {
                 PERSIST_SESSION
               </span>
             </label>
-            <a className="font-mono text-xs uppercase tracking-[0.12em] text-primary transition hover:tracking-[0.16em]" href="#">
+            <Link className="font-mono text-xs uppercase tracking-[0.12em] text-primary transition hover:tracking-[0.16em]" href="/login/forgot-password">
               RECOVER_KEY?
-            </a>
+            </Link>
           </div>
 
           <SubmitButton />

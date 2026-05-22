@@ -4,8 +4,8 @@ import { connectToDatabase } from "@/lib/db";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
-import crypto from "crypto";
-import { sendVerificationEmail } from "@/actions/email/email-services";
+import { start } from "workflow/api";
+import { sendVerificationEmailWorkflow } from "@/workflows/user-auth";
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production"
@@ -22,10 +22,6 @@ async function getUserFromSession() {
   } catch {
     return null;
   }
-}
-
-function generateToken(): string {
-  return crypto.randomBytes(32).toString("hex");
 }
 
 export async function updateNotificationSettings(data: {
@@ -170,21 +166,10 @@ export async function resendVerificationEmail() {
       return { error: "Email is already verified" };
     }
 
-    const token = generateToken();
-    const expires = new Date(Date.now() + 60 * 60 * 1000);
-
-    await db.collection("users").updateOne(
-      { _id: userId },
-      {
-        $set: {
-          emailVerificationToken: token,
-          emailVerificationExpires: expires,
-          updatedAt: new Date(),
-        },
-      }
-    );
-
-    await sendVerificationEmail(user.email, token);
+    await start(sendVerificationEmailWorkflow, [
+      session.userId as string,
+      user.email,
+    ]);
 
     return { success: true, message: "Verification email sent" };
   } catch {

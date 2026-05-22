@@ -3,6 +3,8 @@
 import { connectToDatabase } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
+import { start } from "workflow/api";
+import { sendVerificationEmailWorkflow } from "@/workflows/user-auth";
 
 export async function createAccount(formData: FormData) {
   const firstName = formData.get("firstName") as string;
@@ -36,15 +38,21 @@ export async function createAccount(formData: FormData) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await db.collection("users").insertOne({
+    const result = await db.collection("users").insertOne({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.toLowerCase().trim(),
       password: hashedPassword,
       jobDomain: jobDomain.trim(),
+      isVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    await start(sendVerificationEmailWorkflow, [
+      result.insertedId.toString(),
+      email.toLowerCase().trim(),
+    ]);
   } catch {
     return { errors: { _form: "Something went wrong. Please try again." } };
   }

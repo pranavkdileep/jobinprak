@@ -70,6 +70,7 @@ export interface User {
   socialLinks?: SocialLinks;
   isVerified: boolean;
   emailVerificationToken?: string;
+  emailVerificationExpires?: Date;
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   notificationSettings: NotificationSettings;
