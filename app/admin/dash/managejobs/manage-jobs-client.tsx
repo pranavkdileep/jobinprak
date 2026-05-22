@@ -2,6 +2,7 @@
 
 import {
   bulkUpload,
+  cleanExpiredJobs,
   createJob,
   deleteJob,
   getJob,
@@ -38,6 +39,8 @@ export default function ManageJobsClient() {
   const [editJob, setEditJob] = useState<Partial<Job> | null>(null);
   const [saving, setSaving] = useState(false);
   const [bulkResult, setBulkResult] = useState<string | null>(null);
+  const [cleanResult, setCleanResult] = useState<string | null>(null);
+  const [cleaning, setCleaning] = useState(false);
   const limit = 10;
 
   const fetchJobs = useCallback(async () => {
@@ -166,6 +169,20 @@ export default function ManageJobsClient() {
     }
   }
 
+  async function handleCleanExpired() {
+    if (!confirm("Delete all jobs with past closing dates?")) return;
+    setCleaning(true);
+    setCleanResult(null);
+    const res = await cleanExpiredJobs();
+    if ("error" in res) {
+      setCleanResult(`Error: ${res.error}`);
+    } else {
+      setCleanResult(res.message);
+      fetchJobs();
+    }
+    setCleaning(false);
+  }
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center justify-between gap-4">
@@ -212,8 +229,21 @@ export default function ManageJobsClient() {
           >
             + New Job
           </button>
+          <button
+            onClick={handleCleanExpired}
+            disabled={cleaning}
+            className="rounded-lg border border-error/30 px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] text-error transition hover:bg-error/10 disabled:cursor-wait disabled:opacity-50"
+          >
+            {cleaning ? "Cleaning..." : "Clean Expired"}
+          </button>
         </div>
       </div>
+
+      {cleanResult && (
+        <div className="rounded-xl border border-error/25 bg-error-container/50 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-on-error-container">
+          {cleanResult}
+        </div>
+      )}
 
       {bulkResult && (
         <div className="rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-primary">

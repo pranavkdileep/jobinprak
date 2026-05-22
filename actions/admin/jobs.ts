@@ -179,6 +179,31 @@ export async function bulkUpload(formData: FormData) {
   }
 }
 
+export async function cleanExpiredJobs() {
+  try {
+    await verifyAdmin();
+  } catch {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const today = new Date().toISOString().slice(0, 10);
+
+    const result = await db
+      .collection("jobs")
+      .deleteMany({ closing_date: { $lt: today } });
+
+    return {
+      success: true,
+      deletedCount: result.deletedCount,
+      message: `Cleaned up ${result.deletedCount} expired job(s)`,
+    };
+  } catch {
+    return { error: "Failed to clean expired jobs" };
+  }
+}
+
 export async function deleteJob(jobId: string) {
   try {
     await verifyAdmin();
