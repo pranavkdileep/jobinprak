@@ -87,7 +87,7 @@ export default async function Home() {
       </section>
 
       {featuredJobs.length > 0 && (
-        <section className="border-t border-outline-variant py-16 md:py-20">
+        <section className="relative border-t border-outline-variant py-16 md:py-20">
           <div className="container-portal">
             <div className="mb-10 flex items-center gap-4 md:mb-12">
               <ListIcon className="size-6 shrink-0 text-primary" />
