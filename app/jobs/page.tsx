@@ -4,7 +4,17 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import type { Job } from "@/types/jobs";
 import Link from "next/link";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
+
+export const metadata: Metadata = {
+  title: "Browse Jobs",
+  description: "Search and browse the latest job openings across tech domains. Filter by keyword, skill, experience, and source — Technopark, Infopark, and more.",
+  openGraph: {
+    title: "Browse Jobs | JobInPark",
+    description: "Search and browse the latest job openings across tech domains.",
+  },
+};
 
 type JobsPageSearchParams = Promise<{
   page?: string | string[];

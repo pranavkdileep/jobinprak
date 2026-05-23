@@ -1,5 +1,15 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about JobInPark — an AI-driven job discovery platform built by Pranav K Dileep. Our mission, how it works, and the tech behind it.",
+  openGraph: {
+    title: "About Us | JobInPark",
+    description: "AI-driven job discovery platform connecting talent with opportunity.",
+  },
+};
 
 export default function AboutPage() {
   return (

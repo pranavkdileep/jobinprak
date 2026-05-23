@@ -1,6 +1,16 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with JobInPark. Reach out via LinkedIn, Telegram, GitHub, or email for support, feedback, or questions.",
+  openGraph: {
+    title: "Contact Us | JobInPark",
+    description: "Get in touch with the JobInPark team.",
+  },
+};
 
 export default function ContactPage() {
   return (

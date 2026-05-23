@@ -1,6 +1,12 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import SignupForm from "./signup-form";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create Account",
+  description: "Create your JobInPark account and start discovering AI-matched job opportunities with real-time notifications.",
+};
 
 export default function SignupPage() {
   return (

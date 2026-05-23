@@ -15,8 +15,56 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Job In Park - A Complete Solution for Job Seekers and Employers",
-  description: "Job In Park is a comprehensive platform that connects job seekers with employers, providing a seamless experience for both parties. With our user-friendly interface and powerful features, we aim to revolutionize the job search process and help individuals find their dream jobs while assisting employers in finding the right talent.",
+  title: {
+    default: "JobInPark — AI-Driven Job Discovery Platform",
+    template: "%s | JobInPark",
+  },
+  description:
+    "JobInPark is an AI-driven job platform that connects talent with opportunities using intelligent matching. Search jobs, get real-time notifications, and generate AI-powered application emails.",
+  keywords: [
+    "job search",
+    "AI job matching",
+    "career platform",
+    "job notifications",
+    "tech jobs",
+    "JobInPark",
+    "AI email generation",
+    "job portal",
+  ],
+  authors: [{ name: "Pranav K Dileep" }],
+  creator: "Pranav K Dileep",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://jobinpark.com"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "JobInPark",
+    title: "JobInPark — AI-Driven Job Discovery Platform",
+    description:
+      "Intelligent job matching, real-time notifications, and AI-powered application emails. Find your next opportunity with JobInPark.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "JobInPark — AI-Driven Job Discovery Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JobInPark — AI-Driven Job Discovery Platform",
+    description:
+      "Intelligent job matching, real-time notifications, and AI-powered application emails.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

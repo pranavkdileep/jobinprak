@@ -1,6 +1,16 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Network",
+  description: "Connect with Pranav K Dileep — creator of JobInPark. Computer Science and Cyber Security Engineering Student at UCE Thodupuzha.",
+  openGraph: {
+    title: "Network | JobInPark",
+    description: "Connect with the creator of JobInPark.",
+  },
+};
 
 const profiles = [
   {

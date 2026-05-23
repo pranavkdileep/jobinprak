@@ -6,6 +6,18 @@ import { listPublicJobs } from "@/actions/public/jobs";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { Job } from "@/types/jobs";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "JobInPark — AI-Driven Job Discovery Platform",
+  description:
+    "Intelligent job matching, real-time notifications, and AI-powered application emails. Find your next opportunity with JobInPark.",
+  openGraph: {
+    title: "JobInPark — AI-Driven Job Discovery Platform",
+    description:
+      "Intelligent job matching, real-time notifications, and AI-powered application emails.",
+  },
+};
 
 export default async function Home() {
   const jobsResult = await listPublicJobs({ page: 1, limit: 6 });
@@ -42,6 +54,29 @@ export default async function Home() {
   ];
   return (
     <main className="min-h-screen overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "JobInPark",
+            url: process.env.NEXT_PUBLIC_SITE_URL || "https://jobinpark.com",
+            description:
+              "AI-driven job discovery platform. Intelligent matching, real-time notifications, and AI-powered application emails.",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate:
+                  (process.env.NEXT_PUBLIC_SITE_URL || "https://jobinpark.com") +
+                  "/jobs?keyword={search_term_string}",
+              },
+              "query-input": "required name=search_term_string",
+            },
+          }),
+        }}
+      />
       <SiteHeader active="explore" />
 
       <section className="container-portal relative flex min-h-[42rem] items-center justify-center pb-24 pt-32 md:min-h-[48rem] md:pb-32 md:pt-44">

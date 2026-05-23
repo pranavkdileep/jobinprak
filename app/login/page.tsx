@@ -1,6 +1,12 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import LoginForm from "./login-form";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+  description: "Sign in to your JobInPark account to manage your profile, view matched jobs, and generate AI application emails.",
+};
 
 export default function LoginPage() {
   return (

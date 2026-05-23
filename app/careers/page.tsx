@@ -1,5 +1,15 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Careers",
+  description: "There are currently no active job openings at JobInPark. Check back later for opportunities to join our team.",
+  openGraph: {
+    title: "Careers | JobInPark",
+    description: "Currently no openings at JobInPark.",
+  },
+};
 
 export default function CareersPage() {
   return (
