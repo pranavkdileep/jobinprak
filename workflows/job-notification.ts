@@ -100,6 +100,8 @@ async function fetchActiveJobs(): Promise<JobRecord[]> {
   const jobs = await db
     .collection("jobs")
     .find({ closing_date: { $gte: today } })
+    .sort({ closing_date: 1 })
+    .limit(3)
     .project({
       _id: 1,
       job_title: 1,
@@ -119,13 +121,13 @@ async function fetchActiveJobs(): Promise<JobRecord[]> {
 }
 
 function findMatchingJobs(user: UserRecord, jobs: JobRecord[]): JobRecord[] {
-  const userSkills = user.skills.map((s) => s.toLowerCase());
-  const userDomain = user.jobDomain.toLowerCase();
+  const userSkills = (user.skills ?? []).map((s) => s.toLowerCase());
+  const userDomain = (user.jobDomain ?? "").toLowerCase();
 
   return jobs.filter((job) => {
-    const title = job.job_title.toLowerCase();
-    const desc = job.details.small_description.toLowerCase();
-    const jobSkills = job.details.skill_set.map((s) => s.toLowerCase());
+    const title = (job.job_title ?? "").toLowerCase();
+    const desc = (job.details?.small_description ?? "").toLowerCase();
+    const jobSkills = (job.details?.skill_set ?? []).map((s) => s.toLowerCase());
 
     const domainMatch = title.includes(userDomain) || desc.includes(userDomain);
 
