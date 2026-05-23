@@ -1,6 +1,7 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { LocationSelect } from "@/components/location-select";
+import { TypingHeroTitle } from "@/components/typing-hero-title";
 import { listPublicJobs } from "@/actions/public/jobs";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -56,9 +57,7 @@ export default async function Home() {
           <p className="mx-auto mb-5 w-fit rounded-full border border-outline-variant bg-white/70 px-4 py-2 font-mono text-[0.68rem] font-medium uppercase tracking-[0.24em] text-primary shadow-ambient backdrop-blur md:hidden">
             SYS.REQ // VALIDATED
           </p>
-          <h1 className="mb-6 font-headline text-[clamp(2.7rem,11vw,5.8rem)] font-bold leading-[0.98] tracking-[-0.08em] text-on-background md:tracking-[-0.075em]">
-            SELECT YOUR FUTURE
-          </h1>
+          <TypingHeroTitle />
           <p className="mx-auto mb-10 max-w-2xl text-balance text-base leading-7 text-on-surface-variant md:mb-12 md:text-body-lg">
             Initialize your career trajectory. AI-driven matching connects top talent with the world&apos;s most advanced technology protocols.
           </p>
