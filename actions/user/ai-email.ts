@@ -5,6 +5,7 @@ import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { ObjectId } from "mongodb";
 import OpenAI from "openai";
+import { logAiUsage } from "@/actions/admin/analatics";
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production"
@@ -102,6 +103,8 @@ The body should be concise (2-3 short paragraphs), professional, and highlight r
     }
 
     const result = JSON.parse(content) as { subject: string; body: string };
+    const tokensUsed = completion.usage?.total_tokens ?? 0;
+    await logAiUsage(session.userId as string, tokensUsed);
     return {
       success: true,
       subject: result.subject,

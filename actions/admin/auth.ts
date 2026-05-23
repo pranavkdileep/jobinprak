@@ -65,3 +65,15 @@ export async function adminLogin(
 
   redirect("/admin/dash");
 }
+
+export async function adminLogout() {
+  const cookieStore = await cookies();
+  cookieStore.set("adminJwt", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  redirect("/admin/login");
+}
