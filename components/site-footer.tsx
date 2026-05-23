@@ -1,8 +1,10 @@
-const footerItems = [
-  "Terms of Service",
-  "Privacy Layer",
-  "Documentation",
-  "System Status",
+import Link from "next/link";
+
+const footerLinks: { label: string; href: string }[] = [
+  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "About Us", href: "/about" },
 ];
 
 export function SiteFooter() {
@@ -14,14 +16,14 @@ export function SiteFooter() {
           JobInPark
         </div>
         <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4" aria-label="Footer navigation">
-          {footerItems.map((item) => (
-            <a
-              key={item}
-              href="#"
+          {footerLinks.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
               className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/45 transition duration-300 hover:text-primary-fixed-dim"
             >
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </nav>
         <p className="text-center font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/45 md:text-right">
