@@ -81,12 +81,15 @@ Job Details:
 Applicant Profile:
 - Name: ${user.firstName} ${user.lastName}
 - Email: ${user.email}
-- Domain: ${user.jobDomain || "N/A"}
+- Projects and Details: ${(user.projects || []).map((p: { name: string; description: string; technologies: string[]; url?: string }) => `${p.name} (${p.description}) using ${p.technologies.join(", ")}${p.url ? ` - ${p.url}` : ""}`).join("; ") || "N/A"}
 - Skills: ${(user.skills || []).join(", ")}
 - Summary: ${user.summary || "N/A"}
 - Experience: ${(user.experience || []).map((e: { position: string; company: string }) => `${e.position} at ${e.company}`).join("; ") || "N/A"}
 - Education: ${(user.education || []).map((e: { degree: string; institution: string }) => `${e.degree} from ${e.institution}`).join("; ") || "N/A"}
 - Certifications: ${(user.certifications || []).join(", ") || "N/A"}
+- SocialLinks : ${JSON.stringify(user.socialLinks || {})}
+- phone: ${user.phone || "N/A"}
+
 
 
 The body should be concise (2-3 short paragraphs), professional, and highlight relevant skills. Respond with valid JSON only, no markdown.`;
