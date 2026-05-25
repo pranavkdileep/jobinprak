@@ -92,7 +92,7 @@ Applicant Profile:
 
 
 
-The body should be concise (2-3 short paragraphs), professional, and highlight relevant skills. Respond with valid JSON only, no markdown.`;
+The body should be concise (2-3 short paragraphs), professional, highlight relevant skills and write that resume attached to this email . Respond with valid JSON only, no markdown.`;
 
     const completion = await openai.chat.completions.create({
       model,
