@@ -102,7 +102,7 @@ STRICT RULES:
 - Paragraph 3: Express genuine interest in the specific tech stack of this role, mention resume is attached, and invite a conversation
 - Closing: Name, phone, email, and any relevant social links (LinkedIn, GitHub)
 - Tone: Confident, concise, human — NOT corporate boilerplate
-- Subject line format: "Application for [Job Title] – [Full Name]"
+- Subject line format: "Application for [Job Title]"
 - Respond with valid JSON only. No markdown, no backticks, no preamble.
 
 Job Details:
