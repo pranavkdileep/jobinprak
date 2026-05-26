@@ -24,12 +24,17 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
   const generate = useCallback(async () => {
     const res = await generateApplicationEmail(jobId);
     if ("error" in res) {
       setError(res.error ?? "Generation failed");
       setPhase("error");
     } else {
+      setSubject(res.subject);
+      setBody(res.body);
       setResult({ subject: res.subject, body: res.body });
       setPhase("done");
     }
@@ -45,14 +50,13 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
   }, [phase]);
 
   async function handleSendViaGmail() {
-    if (!result) return;
     setGmailSending(true);
     setGmailResult(null);
 
     const fd = new FormData();
     fd.set("to", applyEmail);
-    fd.set("subject", result.subject);
-    fd.set("body", result.body);
+    fd.set("subject", subject);
+    fd.set("body", body);
     if (selectedFile) fd.set("resume", selectedFile);
 
     const res = await sendViaGmail(fd);
@@ -133,8 +137,47 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
         {phase === "done" && result && (
           <div className="space-y-4">
             <CopyRow label="Apply Email" value={applyEmail} field="email" copiedField={copiedField} onCopy={copy} />
-            <CopyRow label="Subject" value={result.subject} field="subject" copiedField={copiedField} onCopy={copy} />
-            <CopyRow label="Body" value={result.body} field="body" copiedField={copiedField} onCopy={copy} multiline />
+
+            <div className="rounded-xl border border-outline-variant/60 bg-surface-container-low/50 p-4">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-on-surface-variant">
+                  Subject
+                </span>
+                <button
+                  onClick={() => copy(subject, "subject")}
+                  className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.12em] transition hover:border-primary hover:text-primary"
+                >
+                  {copiedField === "subject" ? <CheckIcon className="size-3" /> : <CopyIcon className="size-3" />}
+                  {copiedField === "subject" ? "Copied" : "Copy"}
+                </button>
+              </div>
+              <input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 font-mono text-sm text-on-surface outline-none transition focus:border-primary"
+              />
+            </div>
+
+            <div className="rounded-xl border border-outline-variant/60 bg-surface-container-low/50 p-4">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-on-surface-variant">
+                  Body
+                </span>
+                <button
+                  onClick={() => copy(body, "body")}
+                  className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.12em] transition hover:border-primary hover:text-primary"
+                >
+                  {copiedField === "body" ? <CheckIcon className="size-3" /> : <CopyIcon className="size-3" />}
+                  {copiedField === "body" ? "Copied" : "Copy"}
+                </button>
+              </div>
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                rows={8}
+                className="w-full resize-y rounded-lg border border-outline-variant bg-white px-3 py-2 font-mono text-xs leading-relaxed text-on-surface outline-none transition focus:border-primary"
+              />
+            </div>
 
             {gmailConnected ? (
               <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
