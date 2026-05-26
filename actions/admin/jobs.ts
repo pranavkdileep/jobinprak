@@ -181,6 +181,55 @@ export async function bulkUpload(formData: FormData) {
   }
 }
 
+export async function bulkUploadFromRestApi(auth: { username: string; password: string }, data: Omit<Job, "_id">[]) {
+  try {
+    const db = await connectToDatabase();
+    const admin = await db
+      .collection("admin")
+      .findOne({ username: auth.username });
+
+    if (!admin || auth.password !== admin.password) {
+      return { error: "Invalid credentials" };
+    }
+  } catch {
+    return { error: "Authentication failed" };
+  }
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return { error: "No jobs provided" };
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const existingIds = new Set(
+      (
+        await db
+          .collection("jobs")
+          .find(
+            { job_id: { $in: data.map((j) => j.job_id) } },
+            { projection: { job_id: 1 } }
+          )
+          .toArray()
+      ).map((j) => j.job_id)
+    );
+
+    const toInsert = data.filter((j) => !existingIds.has(j.job_id));
+
+    if (toInsert.length > 0) {
+      await db.collection("jobs").insertMany(toInsert);
+    }
+
+    return {
+      success: true,
+      inserted: toInsert.length,
+      skipped: data.length - toInsert.length,
+      total: data.length,
+    };
+  } catch {
+    return { error: "Failed to import jobs" };
+  }
+}
+
 export async function cleanExpiredJobs() {
   try {
     await verifyAdmin();
