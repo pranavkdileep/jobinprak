@@ -70,7 +70,7 @@ export async function sendViaGmail(formData: FormData) {
     lines.push("");
 
     lines.push(`--${boundary}`);
-    lines.push("Content-Type: text/html; charset=UTF-8");
+    lines.push('Content-Type: text/plain; charset=UTF-8');
     lines.push("Content-Transfer-Encoding: base64");
     lines.push("");
     lines.push(Buffer.from(body, "utf-8").toString("base64"));
