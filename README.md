@@ -29,6 +29,10 @@ JobInPark is a full-featured job portal built with Next.js 16 that connects job 
         <strong>🤖 AI Cover Letters</strong><br/>
         <sub>NVIDIA GPT-powered generation</sub>
       </td>
+      <td align="center" width="200">
+        <strong>📧 Gmail Direct Send</strong><br/>
+        <sub>OAuth · Attachments · Editable</sub>
+      </td>
     </tr>
     <tr>
       <td align="center" width="200">
@@ -51,7 +55,7 @@ JobInPark is a full-featured job portal built with Next.js 16 that connects job 
       </td>
       <td align="center" width="200">
         <strong>🔐 Auth System</strong><br/>
-        <sub>JWT · Email verification · Reset</sub>
+        <sub>JWT · Google OAuth · Email verify</sub>
       </td>
       <td align="center" width="200">
         <strong>⚡ Workflow Automation</strong><br/>
@@ -89,9 +93,11 @@ JobInPark is a full-featured job portal built with Next.js 16 that connects job 
 | **Language** | [TypeScript 5](https://www.typescriptlang.org) |
 | **Styling** | [Tailwind CSS v4](https://tailwindcss.com) |
 | **Database** | [MongoDB 7](https://www.mongodb.com) (native driver) |
-| **Auth** | JWT ([`jose`](https://github.com/panva/jose)) + [`bcryptjs`](https://github.com/dcodeIO/bcrypt.js) |
+| **Auth** | JWT ([`jose`](https://github.com/panva/jose)) + [`bcryptjs`](https://github.com/dcodeIO/bcrypt.js) + [NextAuth.js](https://next-auth.js.org) (Google OAuth) |
 | **AI Engine** | [OpenAI SDK](https://github.com/openai/openai-node) → [NVIDIA NIM API](https://build.nvidia.com/explore/discover) (`openai/gpt-oss-120b`) |
-| **Email** | [Resend](https://resend.com) |
+| **Email** | [Resend](https://resend.com) + [Gmail API](https://developers.google.com/gmail/api) (direct send) |
+| **Google APIs** | [googleapis](https://github.com/googleapis/google-api-nodejs-client) (Gmail), [google-auth-library](https://github.com/googleapis/google-auth-library-nodejs) |
+| **Encryption** | AES-256-GCM for stored OAuth tokens |
 | **Telegram** | Telegram Bot API |
 | **Workflow** | [`workflow`](https://www.npmjs.com/package/workflow) SDK v4.2.4 |
 | **Fonts** | [Geist](https://vercel.com/font) + [JetBrains Mono](https://www.jetbrains.com/lp/mono/) |
@@ -113,14 +119,21 @@ JobInPark is a full-featured job portal built with Next.js 16 that connects job 
 │   └── api/                    # API routes (health, email verify, resume, telegram)
 ├── actions/                    # Server Actions
 │   ├── auth/                   # Login, create account, reset password
-│   ├── user/                   # Jobs, profile, AI email, settings
+│   ├── user/                   # Jobs, profile, AI email, settings, gmail
 │   ├── admin/                  # Admin CRUD, analytics, bulk upload
 │   ├── email/                  # Resend wrapper + templates
+│   ├── encription/             # AES-256-GCM encrypt/decrypt utilities
 │   ├── telegram/send.ts        # Telegram bot sender
 │   └── whatsapp/send.ts        # WhatsApp sender (mock)
 ├── components/                 # Shared React components
+│   ├── email-modal.tsx         # AI email modal with Gmail send + editable fields
+│   ├── job-card.tsx            # Job listing card
+│   ├── dashboard-shell.tsx     # Dashboard layout shell
+│   └── ...
 ├── workflows/                  # Workflow SDK definitions
 ├── lib/                        # Utilities (db, resume templates)
+├── types/                      # TypeScript interfaces
+├── app/api/auth/[...nextauth]  # NextAuth route (Google OAuth handler)
 ├── types/                      # TypeScript interfaces
 ├── public/                     # Static assets (favicons, images)
 ├── repo/                       # README screenshots
@@ -157,9 +170,18 @@ EMAIL_FROM=notifications@jobinpark.com
 # Telegram
 TELEGRAM_BOT_TOKEN=your-bot-token
 
+# Google OAuth (Gmail integration)
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+
+# NextAuth
+NEXTAUTH_SECRET=your-secret-key-min-32-chars-long
+NEXTAUTH_URL=http://localhost:3000
+
 # AI (NVIDIA NIM)
 OPENAI_API_KEY=nvapi-xxxxxxxxxxxx
 OPENAI_BASE_URL=https://integrate.api.nvidia.com/v1
+OPENAI_MODEL=openai/gpt-oss-120b
 
 # App
 NEXT_PUBLIC_APP_URL=https://jobinpark.com
@@ -179,6 +201,17 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Google OAuth Setup
+
+To enable Gmail direct send, create a Google Cloud project and enable the Gmail API:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials.
+2. Create an **OAuth 2.0 Client ID** (Web application).
+3. Add `http://localhost:3000` to **Authorized JavaScript origins**.
+4. Add `http://localhost:3000/api/auth/callback/google` to **Authorized redirect URIs**.
+5. Enable the **Gmail API** in APIs & Services → Library.
+6. Copy the Client ID and Client Secret to `.env.local`.
 
 ### Option 2: Local Dev with Atlas
 
@@ -240,9 +273,23 @@ npm start
 
 ### AI Email Generation
 
-1. User clicks **Apply** on a job card.
+1. User clicks **Apply** on a job card → modal opens with loading animation.
 2. Profile (skills, experience, education) + job details are sent to NVIDIA's GPT model.
-3. A personalized cover letter and application email are returned instantly.
+3. A personalized subject and body are returned — both are **editable** fields so the user can tweak before sending.
+4. Copy individual fields or the target email with one click.
+
+### Gmail Direct Send
+
+1. After AI generation, the modal checks if the user has connected their Gmail account via NextAuth Google OAuth.
+2. If not connected, a **Connect Gmail** button is shown — clicking it triggers Google OAuth with `gmail.send` scope and `offline` access (returns a refresh token).
+3. Once connected, Google OAuth tokens are **encrypted with AES-256-GCM** and stored in MongoDB.
+4. The modal shows a **Send via Gmail** button with an optional resume file picker (.pdf/.doc/.docx).
+5. On send, the server action:
+   - Decrypts the stored Google tokens
+   - Refreshes the access token
+   - Builds a proper MIME email (with optional attachment)
+   - Sends it via the Gmail API
+6. Success/failure response is displayed inline. On 401 (revoked access), tokens are cleared and the user is prompted to reconnect.
 
 ### Resume Builder
 
