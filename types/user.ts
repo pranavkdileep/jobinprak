@@ -78,6 +78,9 @@ export interface User {
   telegramNumber?: string;
   whatsappNotification: boolean;
   telegramNotification: boolean;
+  googleAccessToken: String,
+  googleRefreshToken: String,
+  googleExpiryDate: Number,
   createdAt: Date;
   updatedAt: Date;
 }

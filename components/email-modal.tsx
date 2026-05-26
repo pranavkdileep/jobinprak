@@ -1,7 +1,8 @@
 "use client";
 
 import { generateApplicationEmail } from "@/actions/user/ai-email";
-import { useCallback, useEffect, useState } from "react";
+import { isGmailConnected, sendViaGmail } from "@/actions/user/gmail";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface EmailModalProps {
   jobId: string;
@@ -16,6 +17,11 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
   const [result, setResult] = useState<{ subject: string; body: string } | null>(null);
   const [error, setError] = useState("");
   const [copiedField, setCopiedField] = useState<"email" | "subject" | "body" | null>(null);
+  const [gmailConnected, setGmailConnected] = useState(false);
+  const [gmailSending, setGmailSending] = useState(false);
+  const [gmailResult, setGmailResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const generate = useCallback(async () => {
     const res = await generateApplicationEmail(jobId);
@@ -31,6 +37,27 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
   useEffect(() => {
     generate();
   }, [generate]);
+
+  useEffect(() => {
+    if (phase !== "done") return;
+    isGmailConnected().then(setGmailConnected);
+  }, [phase]);
+
+  async function handleSendViaGmail() {
+    if (!result) return;
+    setGmailSending(true);
+    setGmailResult(null);
+
+    const fd = new FormData();
+    fd.set("to", applyEmail);
+    fd.set("subject", result.subject);
+    fd.set("body", result.body);
+    if (selectedFile) fd.set("resume", selectedFile);
+
+    const res = await sendViaGmail(fd);
+    setGmailResult({ success: "success" in res, message: res.error || res.message || "Sent" });
+    setGmailSending(false);
+  }
 
   async function copy(value: string, field: "email" | "subject" | "body") {
     await navigator.clipboard.writeText(value);
@@ -107,6 +134,69 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
             <CopyRow label="Apply Email" value={applyEmail} field="email" copiedField={copiedField} onCopy={copy} />
             <CopyRow label="Subject" value={result.subject} field="subject" copiedField={copiedField} onCopy={copy} />
             <CopyRow label="Body" value={result.body} field="body" copiedField={copiedField} onCopy={copy} multiline />
+
+            {gmailConnected ? (
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <GmailIcon className="size-4 text-primary" />
+                  <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-primary">
+                    Send via Gmail
+                  </span>
+                </div>
+
+                <label className="mb-3 flex cursor-pointer items-center gap-2 rounded-lg border border-outline-variant bg-white px-3 py-2 transition hover:border-primary">
+                  <UploadIcon className="size-4 shrink-0 text-on-surface-variant" />
+                  <span className="font-mono text-xs text-on-surface-variant">
+                    {selectedFile ? selectedFile.name : "Attach resume (optional)"}
+                  </span>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    className="hidden"
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+
+                <button
+                  onClick={handleSendViaGmail}
+                  disabled={gmailSending}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-primary-container disabled:opacity-50"
+                >
+                  {gmailSending ? (
+                    <>
+                      <span className="size-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <GmailIcon className="size-4" />
+                      Send via Gmail
+                    </>
+                  )}
+                </button>
+
+                {gmailResult && (
+                  <div
+                    className={`mt-3 rounded-lg border p-3 font-mono text-xs ${
+                      gmailResult.success
+                        ? "border-green-300 bg-green-50 text-green-700"
+                        : "border-red-300 bg-red-50 text-red-700"
+                    }`}
+                  >
+                    {gmailResult.message}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a
+                href="/api/auth/signin/google"
+                className="flex items-center justify-center gap-2 rounded-xl border border-outline-variant/60 bg-surface-container-low/50 p-4 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary transition hover:border-primary hover:bg-primary/5"
+              >
+                <GmailIcon className="size-4" />
+                Connect Gmail to send directly
+              </a>
+            )}
           </div>
         )}
         </div>
@@ -174,4 +264,22 @@ function CopyIcon({ className }: { className: string }) {
 
 function CheckIcon({ className }: { className: string }) {
   return <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+function GmailIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+      <path d="M2 8l10 6 10-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function UploadIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 16V4M8 8l4-4 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
 }
