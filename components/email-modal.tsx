@@ -2,6 +2,7 @@
 
 import { generateApplicationEmail } from "@/actions/user/ai-email";
 import { isGmailConnected, sendViaGmail } from "@/actions/user/gmail";
+import { signIn } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface EmailModalProps {
@@ -189,13 +190,13 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
                 )}
               </div>
             ) : (
-              <a
-                href="/api/auth/signin/google"
-                className="flex items-center justify-center gap-2 rounded-xl border border-outline-variant/60 bg-surface-container-low/50 p-4 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary transition hover:border-primary hover:bg-primary/5"
+              <button
+                onClick={() => signIn("google")}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-outline-variant/60 bg-surface-container-low/50 p-4 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary transition hover:border-primary hover:bg-primary/5"
               >
                 <GmailIcon className="size-4" />
                 Connect Gmail to send directly
-              </a>
+              </button>
             )}
           </div>
         )}
