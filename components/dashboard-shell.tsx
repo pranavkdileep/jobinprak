@@ -7,6 +7,7 @@ const dashboardNavItems = [
   { key: "profile", label: "Profile", href: "/dash/profile", icon: <UserIcon className="size-5" /> },
   { key: "resume", label: "Resume", href: "/dash/resume", icon: <DocumentIcon className="size-5" /> },
   { key: "settings", label: "Settings", href: "/dash/settings", icon: <GearIcon className="size-5" /> },
+  { key: "coldemail", label: "Cold Email", href: "/dash/coldemail", icon: <MailIcon className="size-5" /> },
 ];
 
 export function DashboardShell({
@@ -151,4 +152,8 @@ function DocumentIcon({ className }: { className: string }) {
 
 function GearIcon({ className }: { className: string }) {
   return <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM19.4 15a8 8 0 0 0 .1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1L15 6h-4l-.4 3a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a8 8 0 0 0 .1 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.4 3h4l.4-3a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2.2-1.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+function MailIcon({ className }: { className: string }) {
+  return <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16v12H4zM4 6l8 6 8-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
