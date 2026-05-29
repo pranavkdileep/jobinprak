@@ -124,3 +124,23 @@ export async function listUserJobs(params: UserJobsParams) {
     return { error: "Failed to fetch jobs" };
   }
 }
+
+export async function getUserJobByJobId(jobId: number) {
+  try {
+    const session = await getUserFromSession();
+    if (!session) {
+      return { error: "Unauthorized" };
+    }
+
+    const db = await connectToDatabase();
+    const job = await db.collection("jobs").findOne({ job_id: jobId });
+
+    if (!job) {
+      return { error: "Job not found" };
+    }
+
+    return { job: { ...job, _id: job._id.toString() } };
+  } catch {
+    return { error: "Failed to fetch job" };
+  }
+}
