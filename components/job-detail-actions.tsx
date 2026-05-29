@@ -14,21 +14,21 @@ export function JobDetailActions({ job }: { job: Job }) {
 
   return (
     <>
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-col gap-3">
         {externalApply ? (
-          <a href={externalApply} target="_blank" rel="noreferrer" className="initialize-button">
+          <a href={externalApply} target="_blank" rel="noreferrer" className="initialize-button w-full justify-center">
             Initialize
             <ExternalIcon className="size-4" />
           </a>
         ) : (
-          <Link href={normalEmail ? `mailto:${normalEmail}` : `/dash/job?id=${job.job_id}`} className="initialize-button">
+          <Link href={normalEmail ? `mailto:${normalEmail}` : `/dash/job?id=${job.job_id}`} className="initialize-button w-full justify-center">
             Initialize
             <LoginIcon className="size-4" />
           </Link>
         )}
 
         {canGenerateEmail && (
-          <button onClick={() => setShowModal(true)} className="generate-email-button">
+          <button onClick={() => setShowModal(true)} className="generate-email-button w-full justify-center">
             <MailIcon className="size-4" />
             Generate Apply Email
           </button>

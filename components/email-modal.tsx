@@ -4,6 +4,7 @@ import { generateApplicationEmail } from "@/actions/user/ai-email";
 import { isGmailConnected, sendViaGmail } from "@/actions/user/gmail";
 import { signIn } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface EmailModalProps {
   jobId: string;
@@ -14,6 +15,7 @@ interface EmailModalProps {
 type Phase = "generating" | "done" | "error";
 
 export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<Phase>("generating");
   const [result, setResult] = useState<{ subject: string; body: string } | null>(null);
   const [error, setError] = useState("");
@@ -26,6 +28,10 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
 
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const generate = useCallback(async () => {
     const res = await generateApplicationEmail(jobId);
@@ -70,7 +76,9 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
     setTimeout(() => setCopiedField(null), 2000);
   }
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-3 py-4 backdrop-blur-sm sm:items-center sm:p-4" onClick={onClose}>
       <div
         className="relative flex max-h-[calc(100dvh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-electric"
@@ -245,7 +253,8 @@ export function EmailModal({ jobId, applyEmail, onClose }: EmailModalProps) {
         )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

@@ -45,9 +45,10 @@ export default async function DashJobPage({
       {hasError || !job ? (
         <AccessPanel message={result.error ?? "Unable to fetch job details"} />
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-          <article className="job-panel overflow-hidden">
-            <div className="border-b border-outline-variant p-5 md:p-7">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
+          <article className="job-panel overflow-hidden rounded-3xl">
+            <div className="relative overflow-hidden border-b border-outline-variant bg-white/70 p-5 md:p-8">
+              <div className="absolute -right-16 -top-24 size-56 rounded-full bg-primary/10 blur-3xl" />
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="rounded border border-primary/20 bg-primary/10 px-2 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-primary">
                   Job_ID: {job.job_id}
@@ -56,19 +57,19 @@ export default async function DashJobPage({
                   Source: {job.source || "Unknown"}
                 </span>
               </div>
-              <h2 className="font-headline text-4xl font-bold uppercase leading-none tracking-[-0.07em] text-on-surface md:text-5xl">
+              <h2 className="relative font-headline text-[clamp(2.25rem,7vw,4.5rem)] font-bold uppercase leading-[0.9] tracking-[-0.08em] text-on-surface">
                 {job.job_title}
               </h2>
-              <p className="mt-3 font-mono text-xs uppercase tracking-[0.16em] text-on-surface-variant">
+              <p className="relative mt-4 font-mono text-xs uppercase tracking-[0.16em] text-on-surface-variant">
                 {job.company_name}
               </p>
             </div>
 
-            <div className="grid gap-6 p-5 md:p-7">
+            <div className="grid gap-7 p-5 md:p-8">
               {job.details?.small_description && (
                 <section>
                   <SectionTitle>Overview</SectionTitle>
-                  <p className="mt-3 text-body-md leading-7 text-on-surface-variant">
+                  <p className="mt-3 max-w-4xl text-body-md leading-7 text-on-surface-variant">
                     {job.details.small_description}
                   </p>
                 </section>
@@ -92,8 +93,9 @@ export default async function DashJobPage({
                   <SectionTitle>Responsibilities</SectionTitle>
                   <ul className="mt-3 grid gap-3">
                     {job.details.responsibilities.map((responsibility) => (
-                      <li key={responsibility} className="rounded-xl border border-outline-variant/60 bg-surface-container-low/60 p-4 text-body-sm leading-6 text-on-surface-variant">
-                        {responsibility}
+                      <li key={responsibility} className="grid grid-cols-[auto_1fr] gap-3 rounded-xl border border-outline-variant/60 bg-surface-container-low/60 p-4 text-body-sm leading-6 text-on-surface-variant">
+                        <span className="mt-2 size-1.5 rounded-full bg-primary" />
+                        <span>{responsibility}</span>
                       </li>
                     ))}
                   </ul>
@@ -102,8 +104,8 @@ export default async function DashJobPage({
             </div>
           </article>
 
-          <aside className="grid content-start gap-4">
-            <div className="job-panel p-5">
+          <aside className="grid content-start gap-4 xl:sticky xl:top-28">
+            <div className="job-panel rounded-3xl p-5">
               <p className="mb-4 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-primary">Actions</p>
               <JobDetailActions job={job} />
             </div>
@@ -128,7 +130,7 @@ function DetailCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="dash-metric rounded-2xl border border-outline-variant/70 bg-white/78 p-5 shadow-ambient backdrop-blur">
       <p className="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-on-surface-variant">{label}</p>
-      <p className="break-words font-headline text-2xl font-bold uppercase tracking-[-0.06em] text-on-surface">{value}</p>
+      <p className="break-words text-body-md font-semibold leading-6 text-on-surface">{value}</p>
     </div>
   );
 }
